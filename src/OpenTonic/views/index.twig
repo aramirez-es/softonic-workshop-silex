@@ -2,11 +2,5 @@
 
 {% block content %}
 <h1>Welcome to OpenTonic</h1>
-    <ul>
-    {% for worklog in worklogs %}
-        <li><strong>{{ worklog.name }}</strong> says</li>
-        <div>{{ worklog.text }}</div>
-        <p><a href="{{ app.url_generator.generate('worklog', {'id': worklog.worklog_id}) }}">read</a></p>
-    {% endfor %}
-    </ul>
+{% include 'worklogs_list.twig' %}
 {% endblock %}

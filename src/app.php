@@ -44,3 +44,12 @@ $app->get('/worklogs/{id}', function($id) use ($app){
     ->convert('id', function($id){ return (int) $id; })
     ->bind('worklog')
 ;
+
+$app->get('/users/{id}/worklogs', function($id) use ($app){
+    return $app['twig']->render('user_worklogs.twig', array(
+        'worklogs' => $app['opentonic.worklogs.repository']->getByIdUser($id)
+    ));
+})
+    ->convert('id', function($id){ return (int) $id; })
+    ->bind('worklogs_by_user')
+;

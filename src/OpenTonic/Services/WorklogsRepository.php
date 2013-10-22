@@ -26,4 +26,13 @@ class WorklogsRepository
 
         return $statement->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function getByIdUser($user_id)
+    {
+        $statement = $this->db->prepare("SELECT w.worklog_id, w.text, u.name FROM `worklog` w INNER JOIN `user` u USING(`user_id`) WHERE u.user_id = :user_id;");
+        $statement->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
