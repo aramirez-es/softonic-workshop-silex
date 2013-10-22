@@ -2,6 +2,12 @@
     "name": "softonic/workshop",
     "require": {
         "silex/silex": "1.1.1",
-        "twig/twig": "1.14.1"
+        "twig/twig": "1.14.1",
+        "doctrine/dbal": "v2.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "OpenTonic": "src"
+        }
     }
 }
