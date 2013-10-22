@@ -4,4 +4,5 @@
     <h1>Welcome to OpenTonic</h1>
     <h3>{{ worklog.name }}'s worklog</h3>
     <div>{{ worklog.text }}</div>
+    <p><a href="{{ app.url_generator.generate('home') }}">go back</a></p>
 {% endblock %}

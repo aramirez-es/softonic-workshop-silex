@@ -5,6 +5,7 @@ use OpenTonic\Services\WorklogsRepository;
 /**
  * Services Providers Registration.
  */
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/OpenTonic/views'
 ));
@@ -33,10 +34,13 @@ $app->get('/', function() use ($app){
     return $app['twig']->render('index.twig', array(
         'worklogs' => $app['opentonic.worklogs.repository']->getList()
     ));
-});
+})->bind('home');
 
 $app->get('/worklogs/{id}', function($id) use ($app){
     return $app['twig']->render('worklog.twig', array(
         'worklog' => $app['opentonic.worklogs.repository']->getById($id)
     ));
-})->convert('id', function($id){ return (int) $id; });
+})
+    ->convert('id', function($id){ return (int) $id; })
+    ->bind('worklog')
+;
