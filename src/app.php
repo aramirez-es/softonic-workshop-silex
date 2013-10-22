@@ -34,3 +34,9 @@ $app->get('/', function() use ($app){
         'worklogs' => $app['opentonic.worklogs.repository']->getList()
     ));
 });
+
+$app->get('/worklogs/{id}', function($id) use ($app){
+    return $app['twig']->render('worklog.twig', array(
+        'worklog' => $app['opentonic.worklogs.repository']->getById($id)
+    ));
+});
