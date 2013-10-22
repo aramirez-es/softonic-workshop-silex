@@ -1,0 +1,6 @@
+{
+    "name": "softonic/workshop",
+    "require": {
+        "silex/silex": "1.1.1"
+    }
+}
