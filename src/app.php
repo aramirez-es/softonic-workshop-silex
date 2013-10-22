@@ -39,4 +39,4 @@ $app->get('/worklogs/{id}', function($id) use ($app){
     return $app['twig']->render('worklog.twig', array(
         'worklog' => $app['opentonic.worklogs.repository']->getById($id)
     ));
-});
+})->convert('id', function($id){ return (int) $id; });
