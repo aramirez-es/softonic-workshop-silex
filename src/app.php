@@ -1,10 +1,12 @@
 <?php
 
 use OpenTonic\Services\WorklogsRepository;
+use OpenTonic\Controllers;
 
 /**
  * Services Providers Registration.
  */
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/OpenTonic/views'
@@ -25,31 +27,29 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 $app['opentonic.worklogs.repository'] = $app->share(function() use ($app){
     return new WorklogsRepository($app['db']);
 });
+$app['opentonic.controllers.home'] = $app->share(function() use ($app){
+    return new Controllers\Home($app['twig'], $app['opentonic.worklogs.repository']);
+});
+$app['opentonic.controllers.worklogs'] = $app->share(function() use ($app){
+    return new Controllers\Worklogs($app['twig'], $app['opentonic.worklogs.repository']);
+});
+$app['opentonic.controllers.users'] = $app->share(function() use ($app){
+    return new Controllers\Users($app['twig'], $app['opentonic.worklogs.repository']);
+});
+
 
 
 /**
  * All routes declaration.
  */
-$app->get('/', function() use ($app){
-    return $app['twig']->render('index.twig', array(
-        'worklogs' => $app['opentonic.worklogs.repository']->getList()
-    ));
-})->bind('home');
+$app->get('/', 'opentonic.controllers.home:homeAction')->bind('home');
 
-$app->get('/worklogs/{id}', function($id) use ($app){
-    return $app['twig']->render('worklog.twig', array(
-        'worklog' => $app['opentonic.worklogs.repository']->getById($id)
-    ));
-})
+$app->get('/worklogs/{id}', 'opentonic.controllers.worklogs:detailAction')
     ->convert('id', function($id){ return (int) $id; })
     ->bind('worklog')
 ;
 
-$app->get('/users/{id}/worklogs', function($id) use ($app){
-    return $app['twig']->render('user_worklogs.twig', array(
-        'worklogs' => $app['opentonic.worklogs.repository']->getByIdUser($id)
-    ));
-})
+$app->get('/users/{id}/worklogs', 'opentonic.controllers.users:worklogsAction')
     ->convert('id', function($id){ return (int) $id; })
     ->bind('worklogs_by_user')
 ;
