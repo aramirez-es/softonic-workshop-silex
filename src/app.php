@@ -31,7 +31,7 @@ $app['opentonic.controllers.home'] = $app->share(function() use ($app){
     return new Controllers\Home($app['twig'], $app['opentonic.worklogs.repository']);
 });
 $app['opentonic.controllers.worklogs'] = $app->share(function() use ($app){
-    return new Controllers\Worklogs($app['twig'], $app['opentonic.worklogs.repository']);
+    return new Controllers\Worklogs($app['twig'], $app['opentonic.worklogs.repository'], $app['request']);
 });
 $app['opentonic.controllers.users'] = $app->share(function() use ($app){
     return new Controllers\Users($app['twig'], $app['opentonic.worklogs.repository']);
@@ -42,13 +42,17 @@ $app['opentonic.controllers.users'] = $app->share(function() use ($app){
 /**
  * All routes declaration.
  */
+// Home.
 $app->get('/', 'opentonic.controllers.home:homeAction')->bind('home');
 
+// Worklogs.
 $app->get('/worklogs/{id}', 'opentonic.controllers.worklogs:detailAction')
     ->convert('id', function($id){ return (int) $id; })
     ->bind('worklog')
 ;
+$app->post('/worklogs', 'opentonic.controllers.worklogs:saveAction')->bind('save_worklog');
 
+// Users.
 $app->get('/users/{id}/worklogs', 'opentonic.controllers.users:worklogsAction')
     ->convert('id', function($id){ return (int) $id; })
     ->bind('worklogs_by_user')

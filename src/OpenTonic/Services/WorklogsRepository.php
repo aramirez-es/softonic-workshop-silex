@@ -35,4 +35,16 @@ class WorklogsRepository
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function save($worklog)
+    {
+        $text = $worklog->text;
+        $user_id = $worklog->user_id;
+
+        $statement = $this->db->prepare("INSERT INTO `worklog` (`worklog_id`, `text`, `user_id`) VALUES (NULL, :text, :user_id)");
+        $statement->bindParam(':text', $text, \PDO::PARAM_STR);
+        $statement->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
+
+        return $statement->execute();
+    }
 }
